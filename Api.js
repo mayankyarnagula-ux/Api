@@ -5,13 +5,18 @@ const mongoose = require('mongoose');
 const dns = require('dns');
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 app.use(express.json());
+const bcrypt=require("bcrypt");
 const cors = require("cors");
 app.use(cors());
 //meddile ware
-app.use(cors({
-    origin: "http://localhost:5177/products"
-}));
-
+app.use(
+  cors({
+    origin: "http://localhost:5174/products", // React frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+  })
+);
+//
 mongoose.connect("mongodb+srv://mayankyarnagula_db_user:Api@api1.uv9kkym.mongodb.net/?appName=Api1")
 .then(()=>{
     console.log("db connected")
@@ -34,7 +39,7 @@ res.send(err)
 }
 })
 //get all data
-app.get("",async(req,res)=>{
+app.get("/",async(req,res)=>{
 try{
 
     const user = await User.find();
@@ -97,6 +102,39 @@ app.delete("/api/:id",async(req,res)=>{
     console.log(err)
 }
 })
+//reg
+
+app.post("/register", async(req,res)=>{
+    
+    try{
+
+      const {name,email,password} = req.body;
+
+      const userExists = await User.findOne({email})
+
+      if(userExists){
+        return res.end("user already in db")
+      }
+
+      const hashpassword = await bcrypt.hash(password,13);
+      console.log("hashpassword",hashpassword)
+
+
+      const user = new User({
+        name,
+        email,
+        password: hashpassword
+      })
+
+      await user.save();
+
+    }catch(err){
+        console.log(err);
+    }
+
+})
+
+
 
 app.listen(3000,()=>{
     console.log("server started")

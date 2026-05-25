@@ -3,20 +3,20 @@ const { type } = require("node:os");
 
 const userschema = new mongoose.Schema({
   name: {
-        type: String,
-        required: true
+        type:String,
+        
     },
 
-    description: {
+    email: {
         type: String,
-        required: true
+        
     },
 
-    price: {
-        type: Number,
-        required: true
+    password: {
+        type: String,
+        
     }
-});
+})
 
 module.exports = mongoose.model("User",userschema);
 
