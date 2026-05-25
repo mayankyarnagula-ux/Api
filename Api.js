@@ -11,11 +11,11 @@ app.use(cors());
 //meddile ware
 app.use(
   cors({
-    origin: "http://localhost:5174/products", // React frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
+    origin: "*",
   })
 );
+
+ 
 //
 mongoose.connect("mongodb+srv://mayankyarnagula_db_user:Api@api1.uv9kkym.mongodb.net/?appName=Api1")
 .then(()=>{
