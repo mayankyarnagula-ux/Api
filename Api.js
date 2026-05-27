@@ -133,6 +133,33 @@ app.post("/register", async(req,res)=>{
     }
 
 })
+//login
+app.post("/login", async(req,res)=>{
+try{
+
+    const {email,password} = req.body;
+
+    const user = await User.findOne({email});
+
+    if(!user){
+        return res.end("user not found");
+    }
+
+
+    const ismatch = await bcrypt.compare(password,user.password);
+
+    if(!ismatch){
+        return res.end("inavlid pssword");
+    }
+
+   
+
+   res.send("login done")
+
+}catch(err){
+ console.log(err);
+}
+})
 
 
 
